@@ -75,4 +75,4 @@ for iters in range(min(args.iterations, codes.size(0))):
     cv2.imwrite(
         os.path.join(args.output, '{:02d}.png'.format(iters)),
         np.squeeze(image.numpy().clip(0, 1) * 255.0).astype(np.uint8)
-        .transpose(1, 2, 0))
+        .transpose(1, 2, 0)[:,:,::-1])
