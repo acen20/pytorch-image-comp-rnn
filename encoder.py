@@ -1,7 +1,9 @@
 import argparse
 
 import numpy as np
-from scipy.misc import imread, imresize, imsave
+
+import cv2
+
 
 import torch
 from torch.autograd import Variable
@@ -18,7 +20,15 @@ parser.add_argument(
     '--iterations', type=int, default=16, help='unroll iterations')
 args = parser.parse_args()
 
-image = imread(args.input, mode='RGB')
+if not '.gif' in args.input:
+	image = cv2.imread(args.input)[:,:,::-1]
+else:
+	cap = cv2.VideoCapture("8.gif")
+	ret, image = cap.read()
+	cap.release()
+	if ret:
+		image = cv2.cvtColor(image)
+	
 image = torch.from_numpy(
     np.expand_dims(
         np.transpose(image.astype(np.float32) / 255.0, (2, 0, 1)), 0))
